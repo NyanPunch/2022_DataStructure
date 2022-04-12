@@ -1,1 +1,1 @@
-# homework6
+# DS homework6 repository
