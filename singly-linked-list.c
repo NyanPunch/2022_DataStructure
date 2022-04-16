@@ -227,7 +227,7 @@ int deleteNode(headNode* h, int key) {
 			free(n);
 			return 0;
 		}
-		//한 칸씩 앞으로 이동
+		//한 칸씩 뒤로 이동
 		trail = n;
 		n = n->link;
 	}
