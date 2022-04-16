@@ -215,10 +215,10 @@ int deleteNode(headNode* h, int key) {
 	listNode* n = h->first; //삭제노드
 	listNode* trail = NULL; //삭제노드 이전위치 노드
 
-	/* key를 기준으로 삽입할 위치를 찾는다 */
+	/* key를 기준으로 삭제할 위치를 찾는다 */
 	while(n != NULL) {
 		if(n->key == key) {
-			/* 첫 노드 앞쪽에 삽입해야할 경우 인지 검사 */
+			/* 첫 노드를 삭제해야할 경우 인지 검사 */
 			if(n == h->first) {
 				h->first = n->link;
 			} else { /* 중간인 경우거나 마지막인 경우 */
