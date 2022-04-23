@@ -1,14 +1,14 @@
-/*
- *  doubly-linked-list.c
- *
- *  Doubly Linked List
- *
+/*  doubly-linked-list.c
  *  Data Structures
  *  Department of Computer Science 
  *  at Chungbuk National University
- *
  */
-
+/*******************************
+프로그램명: 이중 연결리스트
+작 성 자: 2019038054 김경민
+작 성 일: 2022 04 23
+프로그램 설명: 이중포인터와 싱글포인터의 차이를 이해하고 이중연결리스트 함수 구현
+********************************/ 
 
 
 #include<stdio.h>
