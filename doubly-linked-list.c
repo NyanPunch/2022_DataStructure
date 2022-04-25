@@ -241,7 +241,7 @@ int insertFirst(headNode* h, int key) {
 	node->llink = NULL;	//좌측노드 공백
 
 	listNode *p = h->first; 
-	p->llink = node; //새 노드의 좌측노드가 자신을 가리키게함
+	p->llink = node; //기존 첫 번째 노드의 좌측의 새 노드연결
 	h->first = node; //헤드노드와 새 노드 연결
 
 	return 0;
