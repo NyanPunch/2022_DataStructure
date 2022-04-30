@@ -5,7 +5,7 @@
  *
  *  Department of Computer Science
  *  at Chungbuk National University
- *  2019038054 김경민
+ *
  */
 
 #include<stdio.h>
@@ -193,10 +193,10 @@ int deleteLast(listNode* h) {
 		printf("nothing to delete.\n");
 		return 1;
 	}
-	listNode* remove = h->llink;
+	listNode* remove = h->llink; //h 왼쪽노드가 마지막 노드
 	/* link 정리 */
-	remove->llink->rlink = h;
-	h->llink = remove->llink;
+	remove->llink->rlink = h; //rlink to h leftnode of lastnode
+	h->llink = remove->llink; //leftnode of lastnode를 마지막노드설정
 	free(remove);
 
 	return 1;
@@ -223,12 +223,11 @@ int deleteFirst(listNode* h) {
 		printf("nothing to delete.\n");
 		return 0;
 	}
-	listNode* remove = h->rlink;
+	listNode* remove = h->rlink; //h 오른쪽 노드가 첫번째 노드
 	/* link 정리 */
-	remove->rlink->llink = h;
-	h->rlink = remove->rlink;
+	remove->rlink->llink = h; //두번째 노드의 왼쪽링크를 h와 연결
+	h->rlink = remove->rlink; //헤드노드와 두번째 노드 연결
 	free(remove);
-
 	return 1;
 }
 
@@ -243,7 +242,7 @@ int invertList(listNode* h) {
 	listNode *middle = h;
 	listNode *trail = h;
 	/* 최종 바뀔 링크 유지 */
-	h->llink = h->rlink;
+	h->llink = h->rlink; //첫번째 노드를 마지막 노드로 설정
 
 	while(n != NULL && n != h){ /* 한 노드씩 앞으로 이동 */
 		trail = middle; 
@@ -252,11 +251,9 @@ int invertList(listNode* h) {
 		middle->rlink = trail; /* 중간노드의 좌우링크 변경 */
 		middle->llink = n;
 	}
-	h->rlink = middle;
+	h->rlink = middle; //마지막 노드를 첫번째 노드로 설정
 	return 0;
 }
-
-
 
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(listNode* h, int key) {
@@ -279,10 +276,10 @@ int insertNode(listNode* h, int key) {
 			if(n == h->rlink) {
 				insertFirst(h, key);
 			} else { /* 중간이거나 마지막인 경우 */
-				node->rlink = n;
-				node->llink = n->llink;
-				n->llink->rlink = node;
-				n->llink = node;
+				node->rlink = n;	//n 노드 왼편에 삽입
+				node->llink = n->llink; //n노드 왼편노드와 링크연결
+				n->llink->rlink = node; //n노드 왼편노드의 오른쪽링크 노드연결
+				n->llink = node; //n노드 왼편링크와 노드 연결
 			}
 			return 0;
 		}
@@ -308,8 +305,8 @@ int deleteNode(listNode* h, int key) {
 			} else if (n->rlink == h){ /* 마지막 노드인 경우 */
 				deleteLast(h);
 			} else { /* 중간인 경우 */
-				n->llink->rlink = n->rlink;
-				n->rlink->llink = n->llink;
+				n->llink->rlink = n->rlink; //삭제노드 왼편노드 오른쪽과 연결
+				n->rlink->llink = n->llink; //삭제노드 오른편노드 왼쪽과 연결
 				free(n);
 			}
 			return 0;
