@@ -5,12 +5,11 @@
  *
  *  Department of Computer Science
  *  at Chungbuk National University
- *
+ *  2019038054 김경민
  */
 
 #include<stdio.h>
 #include<stdlib.h>
-/* 필요한 헤더파일 추가 */
 
 typedef struct Node {
 	int key;
