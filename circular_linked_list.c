@@ -1,4 +1,5 @@
-/*  doubly circular linked list
+/*
+ *  doubly circular linked list
  *
  *  Data Structures
  *
@@ -31,14 +32,10 @@ int deleteNode(listNode* h, int key);
 
 void printList(listNode* h);
 
-
-
-int main()
-{
+int main() {
 	char command;
 	int key;
 	listNode* headnode=NULL;
-
 	do{
 		printf("----------------------------------------------------------------\n");
 		printf("                  Doubly Circular Linked List                   \n");
@@ -91,14 +88,13 @@ int main()
 			break;
 		case 'q': case 'Q':
 			freeList(headnode);
+			printf("[\t\t2019038054\t김경민\t\t]\n");
 			break;
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
 			break;
 		}
-
 	}while(command != 'q' && command != 'Q');
-
 	return 1;
 }
 
@@ -126,9 +122,9 @@ int freeList(listNode* h){
 	while(p != NULL && p != h) {
 		prev = p;
 		p = p->rlink;
-		free(prev);
+		free(prev); //이전노드 할당해제
 	}
-	free(h);
+	free(h); //마지막노드 할당해제
 	return 0;
 }
 
@@ -137,21 +133,20 @@ void printList(listNode* h) {
 	listNode* p;
 
 	printf("\n---PRINT\n");
-
+	/* 공백 검사 */
 	if(h == NULL) {
 		printf("Nothing to print....\n");
 		return;
 	}
 
 	p = h->rlink;
-
+	/* 마지막 노드까지 반복 */
 	while(p != NULL && p != h) {
 		printf("[ [%d]=%d ] ", i, p->key);
-		p = p->rlink;
+		p = p->rlink; //한 칸씩 이동
 		i++;
 	}
 	printf("  items = %d\n", i);
-
 
 	/* print addresses */
 	printf("\n---checking addresses of links\n");
@@ -165,7 +160,6 @@ void printList(listNode* h) {
 		p = p->rlink;
 		i++;
 	}
-
 }
 
 /* list에 key에 대한 노드하나를 추가 */
@@ -184,10 +178,10 @@ int insertLast(listNode* h, int key) {
 		node->rlink = h;
 		node->llink = h;
 	} else { /* 첫 노드의 왼쪽 노드 = 마지막 노드 */
-		h->llink->rlink = node;
-		node->llink = h->llink;
-		h->llink = node;
-		node->rlink = h;
+		h->llink->rlink = node; //왼쪽노드의 오른쪽링크와 연결
+		node->llink = h->llink; //왼쪽링크와 왼쪽노드 연결
+		h->llink = node;	//헤드의 왼쪽링크와 연결
+		node->rlink = h;	//오른쪽링크와 헤드연결
 	}
 	return 1;
 }
@@ -215,10 +209,10 @@ int insertFirst(listNode* h, int key) {
 	node->rlink = NULL;
 	node->llink = NULL;
 	/* 새 노드를 헤드노드와 연결 */
-	node->rlink = h->rlink;
-	h->rlink->llink = node;
-	node->llink = h;
-	h->rlink = node;
+	node->rlink = h->rlink; //처음노드를 오른쪽링크와 연결
+	h->rlink->llink = node; //처음노드의 왼쪽링크와 노드 연결
+	node->llink = h; //노드왼쪽링크 헤드 연결
+	h->rlink = node; //첫번째노드로 설정
 	return 1;
 }
 
@@ -238,7 +232,6 @@ int deleteFirst(listNode* h) {
 	return 1;
 }
 
-
 /* 리스트의 링크를 역순으로 재 배치 */
 int invertList(listNode* h) {
 	/* 리스트 공백 검사 */
@@ -247,17 +240,16 @@ int invertList(listNode* h) {
 		return 0;
 	}
 	listNode *n = h->rlink;
-	listNode *trail = h;
 	listNode *middle = h;
-
+	listNode *trail = h;
 	/* 최종 바뀔 링크 유지 */
 	h->llink = h->rlink;
 
-	while(n != NULL && n != h){
-		trail = middle;
+	while(n != NULL && n != h){ /* 한 노드씩 앞으로 이동 */
+		trail = middle; 
 		middle = n;
 		n = n->rlink;
-		middle->rlink = trail;
+		middle->rlink = trail; /* 중간노드의 좌우링크 변경 */
 		middle->llink = n;
 	}
 	h->rlink = middle;
@@ -268,20 +260,18 @@ int invertList(listNode* h) {
 
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(listNode* h, int key) {
-	/* 리스트 공백 검사*/
+	/* 초기화되지 않은 경우 */
 	if(h == NULL) return -1;
 
 	listNode* node = (listNode*)malloc(sizeof(listNode));
 	node->key = key;
 	node->llink = node->rlink = NULL;
-
+	/* 리스트가 공백인 경우 */
 	if (h->rlink == h) {
 		insertFirst(h, key);
 		return 1;
 	}
-
 	listNode* n = h->rlink;
-
 	/* key를 기준으로 삽입할 위치를 찾는다 */
 	while(n != NULL && n != h) {
 		if(n->key >= key) {
@@ -303,24 +293,18 @@ int insertNode(listNode* h, int key) {
 	return 0;
 }
 
-
-/**
- * list에서 key에 대한 노드 삭제
- */
+/* list에서 key에 대한 노드 삭제 */
 int deleteNode(listNode* h, int key) {
-
-	if (h->rlink == h || h == NULL)
-	{
+	/* 리스트 공백 검사 */
+	if (h->rlink == h || h == NULL)	{
 		printf("nothing to delete.\n");
 		return 0;
 	}
-
 	listNode* n = h->rlink;
-
 	while(n != NULL && n != h) {
 		if(n->key == key) {
 			if(n == h->rlink) { /* 첫 노드째 노드 인경우 */
-				deleteFirst(h);
+				deleteFirst(h); 
 			} else if (n->rlink == h){ /* 마지막 노드인 경우 */
 				deleteLast(h);
 			} else { /* 중간인 경우 */
@@ -330,13 +314,9 @@ int deleteNode(listNode* h, int key) {
 			}
 			return 0;
 		}
-
-		n = n->rlink;
+		n = n->rlink; //다음 노드로 이동
 	}
-
 	/* 찾지 못 한경우 */
 	printf("cannot find the node for key = %d\n", key);
 	return 0;
 }
-
-
