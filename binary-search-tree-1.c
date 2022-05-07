@@ -20,14 +20,14 @@ typedef struct node {
 int initializeBST(Node** h);
 
 /* functions that you have to implement */
-void inorderTraversal(Node* ptr);	  /* recursive inorder traversal */
-void preorderTraversal(Node* ptr);    /* recursive preorder traversal */
-void postorderTraversal(Node* ptr);	  /* recursive postorder traversal */
-int insert(Node* head, int key);  /* insert a node to the tree */
-int deleteLeafNode(Node* head, int key);  /* delete the leaf node for the key */
-Node* searchRecursive(Node* ptr, int key);  /* search the node for the key */
-Node* searchIterative(Node* head, int key);  /* search the node for the key */
-int freeBST(Node* head); /* free all memories allocated to the tree */
+void inorderTraversal(Node* ptr);	  	/* recursive inorder traversal */
+void preorderTraversal(Node* ptr);    		/* recursive preorder traversal */
+void postorderTraversal(Node* ptr);	  	/* recursive postorder traversal */
+int insert(Node* head, int key); 		/* insert a node to the tree */
+int deleteLeafNode(Node* head, int key);  	/* delete the leaf node for the key */
+Node* searchRecursive(Node* ptr, int key);  	/* search the node for the key */
+Node* searchIterative(Node* head, int key);  	/* search the node for the key */
+int freeBST(Node* head); 			/* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
 
@@ -110,7 +110,6 @@ int main()
 }
 
 int initializeBST(Node** h) {
-
 	/* if the tree is not empty, then remove all allocated nodes from the tree*/
 	if(*h != NULL)
 		freeBST(*h);
@@ -123,21 +122,33 @@ int initializeBST(Node** h) {
 	return 1;
 }
 
-
-
+/* All Traversal maded recursive function */
+/* 중위 순회 LVR */
 void inorderTraversal(Node* ptr)
 {
-
+	if(ptr){
+		inorderTraversal(ptr->left);
+		printf(" %d ",ptr->key);
+		inorderTraversal(ptr->right);
+	}
 }
-
+/* 전위 순회 VLR */
 void preorderTraversal(Node* ptr)
 {
-
+	if(ptr){
+		printf(" %d ",ptr->key);
+		inorderTraversal(ptr->left);
+		inorderTraversal(ptr->right);
+	}	
 }
-
+/* 후위 순회 LRV */
 void postorderTraversal(Node* ptr)
 {
-
+	if(ptr){
+		inorderTraversal(ptr->left);
+		inorderTraversal(ptr->right);
+		printf(" %d ",ptr->key);
+	}	
 }
 
 
