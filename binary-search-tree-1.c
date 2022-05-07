@@ -25,17 +25,16 @@ typedef struct node {
 int initializeBST(Node** h);
 
 /* functions that you have to implement */
-void inorderTraversal(Node* ptr);	  /* recursive inorder traversal */
-void preorderTraversal(Node* ptr);    /* recursive preorder traversal */
-void postorderTraversal(Node* ptr);	  /* recursive postorder traversal */
-int insert(Node* head, int key);  /* insert a node to the tree */
-int deleteLeafNode(Node* head, int key);  /* delete the leaf node for the key */
+void inorderTraversal(Node* ptr);	 		/* recursive inorder traversal */
+void preorderTraversal(Node* ptr);    		/* recursive preorder traversal */
+void postorderTraversal(Node* ptr);	  		/* recursive postorder traversal */
+int insert(Node* head, int key);  			/* insert a node to the tree */
+int deleteLeafNode(Node* head, int key);  	/* delete the leaf node for the key */
 Node* searchRecursive(Node* ptr, int key);  /* search the node for the key */
-Node* searchIterative(Node* head, int key);  /* search the node for the key */
-int freeBST(Node* head); /* free all memories allocated to the tree */
+Node* searchIterative(Node* head, int key); /* search the node for the key */
+int freeBST(Node* head); 					/* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
-
 
 int main()
 {
@@ -191,15 +190,60 @@ int insert(Node* head, int key)
 		parentnode->right = node;
 	return 1;
 }
-
+/* ONLY leafNode  */
 int deleteLeafNode(Node* head, int key)
 {
-
+	/* 전처리 공백 검사 */
+	if(head == NULL){
+		printf("Nothing to delete node\n");
+		return 0;
+	}
+	if(head->left == NULL){
+		printf("Nothing to delete node\n");
+		return 0;		
+	}
+	
+	Node* ptr = head->left;
+	Node* parentnode = head;
+	/* leaf 노드 삭제 */
+	while(ptr != NULL){
+		if(ptr->key == key){
+			if(ptr->left == NULL && ptr->right == NULL){
+				/* 노드가 하나인 경우 */
+				if(parentnode == head) head->left = NULL;
+				/* 좌우 구분 후 노드 삭제 */
+				if(parentnode->left == ptr)
+					parentnode->left = NULL;
+				else
+					parentnode->right = NULL;
+				free(ptr);
+			}
+			else /*  */
+			printf("[%d] Node is not leaf Node!\n", ptr->key);
+			return 1;
+		}
+		parentnode = ptr;
+		/* 부모노드의 크기의 따라 이동 */
+		if(ptr->key < key)
+		    ptr = ptr->right;
+		else ptr = ptr->left;
+	}
+	printf("Cannot find delete Node\n");
+	return 0;
 }
 
 Node* searchRecursive(Node* ptr, int key)
 {
-
+	if(ptr == NULL) return NULL;
+	
+	if(ptr->key < key) { /* 찾는 key가 큰 경우 right */
+		ptr = searchRecursive(ptr->right, key);
+	}
+	else if (ptr->key > key){ /* key가 더 작은 경우 left */
+		ptr = searchRecursive(ptr->left, key);
+	}
+	/* ptr->key == key */
+	return ptr;
 }
 
 Node* searchIterative(Node* head, int key)
