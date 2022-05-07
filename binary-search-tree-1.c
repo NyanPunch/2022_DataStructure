@@ -49,7 +49,7 @@ int main()
 		printf("                   Binary Search Tree #1                        \n");
 		printf("----------------------------------------------------------------\n");
 		printf(" Initialize BST       = z                                       \n");
-		printf(" Insert Node          = n      Delete Node                  = d \n");
+		printf(" Insert Node          = n      Delete Leaf Node                  = d \n");
 		printf(" Inorder Traversal    = i      Search Node Recursively      = s \n");
 		printf(" Preorder Traversal   = p      Search Node Iteratively      = f\n");
 		printf(" Postorder Traversal  = t      Quit                         = q\n");
@@ -142,16 +142,16 @@ void preorderTraversal(Node* ptr)
 {
 	if(ptr){
 		printf(" [%d] ",ptr->key);
-		inorderTraversal(ptr->left);
-		inorderTraversal(ptr->right);
+		preorderTraversal(ptr->left);
+		preorderTraversal(ptr->right);
 	}	
 }
 /* 후위 순회 LRV */
 void postorderTraversal(Node* ptr)
 {
 	if(ptr){
-		inorderTraversal(ptr->left);
-		inorderTraversal(ptr->right);
+		postorderTraversal(ptr->left);
+		postorderTraversal(ptr->right);
 		printf(" [%d] ",ptr->key);
 	}	
 }
@@ -219,7 +219,7 @@ int deleteLeafNode(Node* head, int key)
 					parentnode->right = NULL;
 				free(ptr);
 			}
-			else /*  */
+			else /* 리프노드가 아닌경우 */
 			printf("[%d] Node is not leaf Node!\n", ptr->key);
 			return 1;
 		}
@@ -264,6 +264,7 @@ Node* searchIterative(Node* head, int key)
 
 	return NULL;
 }
+
 
 int freeBST(Node* head)
 {
