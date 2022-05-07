@@ -1,11 +1,16 @@
-/*
- * Binary Search Tree #1
+/* Binary Search Tree #1
  *
  * Data Structures
  *
  * School of Computer Science
  * at Chungbuk National University
- *
+ * 
+ * 2019038054 김경민
+ * 
+ * 모든 원소는 서로 상이한 키를 갖는다.
+ * 왼쪽 서브트리의 키는 그 루트의 키보다 작다.
+ * 오른쪽 서브트리의 키는 그 루트의 키보다 크다.
+ * 왼쪽, 오른쪽 서브트리도 이원 탐색트리다.
  */
 
 #include <stdio.h>
@@ -20,14 +25,14 @@ typedef struct node {
 int initializeBST(Node** h);
 
 /* functions that you have to implement */
-void inorderTraversal(Node* ptr);	  	/* recursive inorder traversal */
-void preorderTraversal(Node* ptr);    		/* recursive preorder traversal */
-void postorderTraversal(Node* ptr);	  	/* recursive postorder traversal */
-int insert(Node* head, int key); 		/* insert a node to the tree */
-int deleteLeafNode(Node* head, int key);  	/* delete the leaf node for the key */
-Node* searchRecursive(Node* ptr, int key);  	/* search the node for the key */
-Node* searchIterative(Node* head, int key);  	/* search the node for the key */
-int freeBST(Node* head); 			/* free all memories allocated to the tree */
+void inorderTraversal(Node* ptr);	  /* recursive inorder traversal */
+void preorderTraversal(Node* ptr);    /* recursive preorder traversal */
+void postorderTraversal(Node* ptr);	  /* recursive postorder traversal */
+int insert(Node* head, int key);  /* insert a node to the tree */
+int deleteLeafNode(Node* head, int key);  /* delete the leaf node for the key */
+Node* searchRecursive(Node* ptr, int key);  /* search the node for the key */
+Node* searchIterative(Node* head, int key);  /* search the node for the key */
+int freeBST(Node* head); /* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
 
@@ -60,6 +65,7 @@ int main()
 			break;
 		case 'q': case 'Q':
 			freeBST(head);
+			printf("-------------------김경민----------2019038054-------------------\n");
 			break;
 		case 'n': case 'N':
 			printf("Your Key = ");
@@ -151,10 +157,39 @@ void postorderTraversal(Node* ptr)
 	}	
 }
 
-
+/* 삽입 함수 */
 int insert(Node* head, int key)
-{
+{	/* new node */
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->key = key;
+	node->left = node->right = NULL;
+	/* if tree is null */
+	if(head->right == NULL){
+		head->right = node;
+		return 0;
+	}
+	/* head->left == root */
+	Node* ptr = head->left; /* 삽입 자리 탐색 변수 */
+	Node* parentnode = NULL; /* 삽입노드의 부모노드 */
 
+	while( ptr != NULL){
+		/* 삽입하는 키와 같을 경우 리턴, 삽입 불가 */
+		if(ptr->key == key) return 1;
+
+		parentnode = ptr; //부모노드 위치 조정
+
+		/* 삽입하는 key가 위치한 key보다 클 경우 오른쪽 노드로 이동
+		   작을 경우 왼쪽 노드로 이동 */
+		if (ptr->key < key)
+		    ptr = ptr->right;
+		else ptr = ptr->left;
+	}
+	/* 부모노드가 클 경우 왼쪽 서브트리 */
+	if(parentnode->key > key)
+		parentnode->left = node;
+	else /* 부모노드가 작을 경우 오른쪽 서브트리 */
+		parentnode->right = node;
+	return 1;
 }
 
 int deleteLeafNode(Node* head, int key)
@@ -177,8 +212,3 @@ int freeBST(Node* head)
 {
 
 }
-
-
-
-
-
