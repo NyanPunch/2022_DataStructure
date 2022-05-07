@@ -33,7 +33,7 @@ int deleteLeafNode(Node* head, int key);  	/* delete the leaf node for the key *
 Node* searchRecursive(Node* ptr, int key);  /* search the node for the key */
 Node* searchIterative(Node* head, int key); /* search the node for the key */
 int freeBST(Node* head); 					/* free all memories allocated to the tree */
-
+void freeNode(Node* ptr);					/* free all memories allocated to the node */
 /* you may add your own defined functions if necessary */
 
 int main()
@@ -133,7 +133,7 @@ void inorderTraversal(Node* ptr)
 {
 	if(ptr){
 		inorderTraversal(ptr->left);
-		printf(" %d ",ptr->key);
+		printf(" [%d] ",ptr->key);
 		inorderTraversal(ptr->right);
 	}
 }
@@ -141,7 +141,7 @@ void inorderTraversal(Node* ptr)
 void preorderTraversal(Node* ptr)
 {
 	if(ptr){
-		printf(" %d ",ptr->key);
+		printf(" [%d] ",ptr->key);
 		inorderTraversal(ptr->left);
 		inorderTraversal(ptr->right);
 	}	
@@ -152,7 +152,7 @@ void postorderTraversal(Node* ptr)
 	if(ptr){
 		inorderTraversal(ptr->left);
 		inorderTraversal(ptr->right);
-		printf(" %d ",ptr->key);
+		printf(" [%d] ",ptr->key);
 	}	
 }
 
@@ -161,11 +161,12 @@ int insert(Node* head, int key)
 {	/* new node */
 	Node* node = (Node*)malloc(sizeof(Node));
 	node->key = key;
-	node->left = node->right = NULL;
+	node->left = NULL;
+	node->right = NULL;
 	/* if tree is null */
-	if(head->right == NULL){
-		head->right = node;
-		return 0;
+	if(head->left == NULL){
+		head->left = node;
+		return 1;
 	}
 	/* head->left == root */
 	Node* ptr = head->left; /* 삽입 자리 탐색 변수 */
@@ -248,11 +249,41 @@ Node* searchRecursive(Node* ptr, int key)
 
 Node* searchIterative(Node* head, int key)
 {
+	if(head == NULL) return NULL;
 
+	Node* ptr = head->left;
+
+	while(ptr != NULL){
+		/* key 찾은 경우 */
+		if (ptr->key == key) return ptr;
+		/* key 크기의 따라 노드 이동 */
+		if (ptr->key < key)
+			ptr = ptr->right;
+		else ptr = ptr->left;
+	}
+
+	return NULL;
 }
-
 
 int freeBST(Node* head)
 {
+	/* 노드가 하나인 경우 */
+	if(head->left == head) {
+		free(head);
+		return 1;
+	}
+	/* 노드가 여러개인 경우 */
+	Node* p = head->left;
+	freeNode(p);
+	free(head);
+	return 1;
+}
 
+void freeNode(Node* ptr)
+{
+	if(ptr) {
+		freeNode(ptr->left);
+		freeNode(ptr->right);
+		free(ptr);
+	}
 }
