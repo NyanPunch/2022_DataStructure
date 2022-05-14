@@ -46,10 +46,7 @@ int deleteNode(Node* head, int key);  /* delete the node for the key */
 int freeBST(Node* head); /* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
-
 void printStack();
-
-
 
 int main()
 {
@@ -128,8 +125,6 @@ int initializeBST(Node** h) {
 	return 1;
 }
 
-
-
 void recursiveInorder(Node* ptr)
 {
 	if(ptr) {
@@ -174,13 +169,11 @@ void levelOrder(Node* ptr)
 	}
 }
 
-
 int insert(Node* head, int key)
 {
 	Node* newNode = (Node*)malloc(sizeof(Node));
 	newNode->key = key;
-	newNode->left = NULL;
-	newNode->right = NULL;
+	newNode->left = newNode->right = NULL;
 
 	if (head->left == NULL) {
 		head->left = newNode;
@@ -189,28 +182,19 @@ int insert(Node* head, int key)
 
 	/* head->left is the root */
 	Node* ptr = head->left;
-
 	Node* parentNode = NULL;
 	while(ptr != NULL) {
-
-		/* if there is a node for the key, then just return */
+		/* 삽입할 key와 동일한 노드가 존재하면 삽입 불가하므로 리턴 */
 		if(ptr->key == key) return 1;
-
-		/* we have to move onto children nodes,
-		 * keep tracking the parent using parentNode */
+		/* 동일한 노드가 없다면 부모노드 위치 조정 */
 		parentNode = ptr;
-
-		/* key comparison, if current node's key is greater than input key
-		 * then the new node has to be inserted into the right subtree;
-		 * otherwise the left subtree.
-		 */
-		if(ptr->key < key)
-			ptr = ptr->right;
-		else
-			ptr = ptr->left;
+		/* 삽입할 key 값이 큰 경우 오른쪽 노드로 이동하고 
+		 * 삽입할 key 값이 작은 경우 왼쪽 노드로 이동한다 */
+		if(ptr->key < key) ptr = ptr->right;
+		else ptr = ptr->left;
 	}
 
-	/* linking the new node to the parent */
+	/* 새로 삽입한 노드를 부모노드와 연결 */
 	if(parentNode->key > key)
 		parentNode->left = newNode;
 	else
@@ -220,12 +204,13 @@ int insert(Node* head, int key)
 
 
 int deleteNode(Node* head, int key)
-{
-	if(head == NULL){ //is empty
+{	
+	/* Check empty */
+	if(head == NULL){
 		printf("\n Nothing to delete!\n");
 		return 0;
 	}
-	if(head->left == NULL){ //is empty
+	if(head->left == NULL){
 		printf("\n Nothing to delete!\n");
 		return 0;
 	}
@@ -258,7 +243,6 @@ int deleteNode(Node* head, int key)
 	/* case 3: 두 자식을 가진 비리프 노드 삭제*/
 }
 
-
 void freeNode(Node* ptr)
 {
 	if(ptr) {
@@ -270,37 +254,50 @@ void freeNode(Node* ptr)
 
 int freeBST(Node* head)
 {
-
 	if(head->left == head)
 	{
 		free(head);
 		return 1;
 	}
-
 	Node* p = head->left;
-
 	freeNode(p);
-
 	free(head);
 	return 1;
 }
-
-
-
-Node* pop()
-{
+/* 스택의 탑 감소 */
+Node* pop() {
+	if(top < 0) return NULL;
+	return stack[top--];
 }
-
-void push(Node* aNode)
-{
+/* 스택의 탑을 증가시키고 삽입 */
+void push(Node* aNode) {
+	stack[++top] = aNode; 
 }
-
-
-
+/* front를 증가시켜 삭제 */
 Node* deQueue()
 {
+	if(front == rear){
+		printf("\n Queue is empty!\n");
+		return NULL;
+	}
+	front = (front + 1) % MAX_QUEUE_SIZE;
+	return queue[front];
 }
-
+/* rear를 증가시켜 삽입 */
 void enQueue(Node* aNode)
 {
+	rear = (rear + 1) % MAX_QUEUE_SIZE;
+	if(front == rear){
+		printf("\n Queue is FULL!\n");
+		return;
+	}
+	queue[rear] = aNode;
+}
+
+void printStack(){
+	int i = 0;
+	printf("---[stack]---\n");
+	while(i <= top){
+		printf("stack[%d] = %d\n", i, stack[i]->key);
+	}
 }
