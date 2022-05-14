@@ -159,11 +159,11 @@ void levelOrder(Node* ptr)
 	for(;;){
 		ptr = deQueue();
 		if(ptr){
-			printf(" [%d] ", ptr->key);
+			printf(" [%d] ", ptr->key); /* V */
 			if(ptr->left)
-			    enQueue(ptr->left);
+			    enQueue(ptr->left);		/* L */
 			if(ptr->right)
-			    enQueue(ptr->right);
+			    enQueue(ptr->right);	/* R */
 		}
 		else break;
 	}
@@ -237,10 +237,52 @@ int deleteNode(Node* head, int key)
 	}
 
 	/* case 1: 리프 원소 삭제 */
-
+	if(p->left == NULL && p->right == NULL){
+		/* 자식노드의 위치 확인 후 삭제 */
+		if(parent != NULL){
+			if(parent->left == p) parent->left = NULL;
+			else parent->right = NULL;
+		}
+		else { /* parent == NULL */
+			head->left = NULL;
+		}
+		free(p);
+		return 0;
+	}
 	/* case 2: 하나의 자식을 가진 비리프 노드 삭제 */
+	if(p->left == NULL || p->right == NULL){
+		Node *child;
+		/* 자식노드 위치 초기화 */
+		if(p->left != NULL) child = p->left;
+		else child = p->right;
 
-	/* case 3: 두 자식을 가진 비리프 노드 삭제*/
+		if(parent != NULL){
+			if(parent->left == p) parent->left = child;
+			else parent->right = child;
+		}
+		else{ /* parent == NULL */
+			root = child;
+		}
+		free(p);
+		return 0;
+	}
+	/* case 3: 두 자식을 가진 비리프 노드 삭제 */
+	/* 오른쪽 자식 중 가장 작은 값을 찾아 대체 */
+	Node *candiate;
+	parent = p;
+	candiate = p->right;
+	/* 왼쪽 자식이 작은 값 이므로 왼쪽을 탐색 */
+	while(candiate->left != NULL){
+		parent = candiate;
+		candiate = candiate->left;
+	}
+	
+	if (parent->right == candiate) parent->right = candiate->right;
+	else parent->left = candiate->right;
+
+	p->key = candiate->key;
+	free(candiate);
+	return 1;
 }
 
 void freeNode(Node* ptr)
