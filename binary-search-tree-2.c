@@ -46,7 +46,6 @@ int deleteNode(Node* head, int key);  /* delete the node for the key */
 int freeBST(Node* head); /* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
-void printStack();
 
 int main()
 {
@@ -74,6 +73,9 @@ int main()
 			break;
 		case 'q': case 'Q':
 			freeBST(head);
+			printf("----------------------------------------------------------------\n");
+			printf("                    2019038054       김경민                     \n");
+			printf("----------------------------------------------------------------\n");
 			break;
 		case 'i': case 'I':
 			printf("Your Key = ");
@@ -85,22 +87,15 @@ int main()
 			scanf("%d", &key);
 			deleteNode(head, key);
 			break;
-
 		case 'r': case 'R':
 			recursiveInorder(head->left);
 			break;
 		case 't': case 'T':
 			iterativeInorder(head->left);
 			break;
-
 		case 'l': case 'L':
 			levelOrder(head->left);
 			break;
-
-		case 'p': case 'P':
-			printStack();
-			break;
-
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
 			break;
@@ -139,7 +134,7 @@ void iterativeInorder(Node* node)
 {
 	for(;;){ //무한루프
 		//왼쪽 자식노드 순회
-		for(; node; node->left) //node != NULL 반복
+		for(; node; node = node->left) //node != NULL 반복
 			push(node); //스택에 삽입
 		node = pop();	//스택에서 삭제
 
@@ -268,20 +263,22 @@ int deleteNode(Node* head, int key)
 	}
 	/* case 3: 두 자식을 가진 비리프 노드 삭제 */
 	/* 오른쪽 자식 중 가장 작은 값을 찾아 대체 */
-	Node *candiate;
-	parent = p;
+	Node *candiate; //작은 값 탐색 노드 선언
+	parent = p; 	//삭제 노드 = 부모 노드
 	candiate = p->right;
-	/* 왼쪽 자식이 작은 값 이므로 왼쪽을 탐색 */
+	/* 왼쪽 자식이 작은 값 이므로 왼쪽 마지막 노드 이동 */
 	while(candiate->left != NULL){
 		parent = candiate;
 		candiate = candiate->left;
 	}
-	
+	/* 노드 이동을 안한 경우 */
 	if (parent->right == candiate) parent->right = candiate->right;
-	else parent->left = candiate->right;
+	else /* parent->left == candiate */
+		parent->left = candiate->right;
 
+	/* 삭제 노드 위치에 candiate가 삽입 */
 	p->key = candiate->key;
-	free(candiate);
+	free(candiate); 
 	return 1;
 }
 
@@ -319,7 +316,7 @@ void push(Node* aNode) {
 Node* deQueue()
 {
 	if(front == rear){
-		printf("\n Queue is empty!\n");
+		printf("\n Queue is empty!");
 		return NULL;
 	}
 	front = (front + 1) % MAX_QUEUE_SIZE;
@@ -334,12 +331,4 @@ void enQueue(Node* aNode)
 		return;
 	}
 	queue[rear] = aNode;
-}
-
-void printStack(){
-	int i = 0;
-	printf("---[stack]---\n");
-	while(i <= top){
-		printf("stack[%d] = %d\n", i, stack[i]->key);
-	}
 }
