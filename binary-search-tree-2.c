@@ -5,7 +5,7 @@
  *
  * Department of Computer Science
  * at Chungbuk National University
- *
+ * 2019038054 김경민
  */
 
 #include <stdio.h>
