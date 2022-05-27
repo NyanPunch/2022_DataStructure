@@ -15,6 +15,8 @@ typedef struct node{
 }GraphNode;
 #define MAX_VERTEX 10
 
+short int visited[MAX_VERTEX];
+
 /* for stack */
 #define MAX_STACK_SIZE 10	
 GraphNode* stack[MAX_STACK_SIZE];
@@ -34,19 +36,19 @@ void enQueue(GraphNode* aNode);
 
 /* 함수 선언 */
 int initializeGraph(GraphNode** h); /* 그래프 생성 */
-int insertVertex(GraphNode* h, int vertex);	/* vertex 삽입 */
-int insertEdge(GraphNode*h, int ,int );	/* edge 삽입 */
-void DFS();	/* 깊이 우선 탐색 */
-void BFS();	/* 너비 우선 탐색 */
-void printGraph();
-int freeGraph(GraphNode* h);
-int freeVertex(GraphNode* ptr);
+int insertVertex(GraphNode* h, int v);	/* vertex 삽입 */
+int insertEdge(GraphNode*h, int u,int v);	/* edge 삽입 */
+void DFS(GraphNode* h, int v);	/* 깊이 우선 탐색 */
+void BFS(GraphNode* h, int v);	/* 너비 우선 탐색 */
+void printGraph(GraphNode* h);	/* 그래프 출력 */
+int freeGraph(GraphNode* h);	/* 그래프할당해제 */
+int freeVertex(GraphNode* ptr);	/* 정점할당해제 */
 
 int main()
 {
 	char command;
-	int u, v;
 	GraphNode* head = NULL;
+	int u, v;
 
 	do{
 		printf("\n\n");
@@ -64,7 +66,7 @@ int main()
 
 		switch(command) {
 		case 'z': case 'Z':
-			initializeGraph(head);
+			initializeGraph(&head);
 			break;
 		case 'q': case 'Q':
 			freeGraph(head);
@@ -75,20 +77,19 @@ int main()
         case 'v': case 'V':
             printf("Your Key = ");
             scanf("%d", &u);
-			InsertVertex(head, u);
+			insertVertex(head, u);
 			break;
         case 'e': case 'E':
             printf("Your Key(u) = ");
             scanf("%d", &u);
             printf("Your Key(v) = ");
             scanf("%d", &v);
-			InsertEdge(head, u, v);
+			insertEdge(head, u, v);
 			break;
         case 'd': case 'D':
 			printf("Your Key = ");
             scanf("%d", &u);
 			DFS(head, u);
-			break;
 			break;
         case 'b': case 'B':
 			printf("Your Key = ");
@@ -96,7 +97,7 @@ int main()
 			BFS(head, u);
 			break;
         case 'p': case 'P':
-			PrintGraph(head);
+			printGraph(head);
 			break;			
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
@@ -108,13 +109,13 @@ int main()
 	return 1;
 }
 
-int initializeGraph(GraphNode **h){
+int initializeGraph(GraphNode** h){
 	if(*h != NULL ) freeGraph(*h);
 	/* MAX VERTEX SIZE = 10 */
 	*h = (GraphNode*)malloc(sizeof(GraphNode)*MAX_VERTEX);
 	for(int i=0;i<MAX_VERTEX;i++){
 		(*h+i)->link = NULL;		/* 초기화 */ 
-		(*h+i)->vertex = -9999;		
+		(*h+i)->vertex = -1;		
 	}
 	top = -1;
 	front = rear = -1;
@@ -142,7 +143,7 @@ int freeVertex(GraphNode* ptr){
 int insertVertex(GraphNode* h, int v){
 	/* 정점이 존재하는 경우 */
 	if((h+v)->vertex == v){
-		printf("\n Vertex is already exists!\n");
+		printf(" Vertex is already exists!\n");
 		return 0;
 	}
 	/* 정점은 0~9값이 부여되므로 해당 배열값에 생성 */
@@ -152,26 +153,125 @@ int insertVertex(GraphNode* h, int v){
 /* 간선 생성 */
 int insertEdge(GraphNode* h, int u,int v){
 	/* 두 정점이 존재하지 않은경우 */
-	if((h+u)->vertex != u ||(h+v)->vertex != v);{
-		printf("\n Vertex is not exists!\n");
+	if((h+u)->vertex==-1||(h+v)->vertex==-1){	//??? vertex?? ???????? ??´?? ?????? ???
+		printf(" Vertex is not exists!\n");
 		return 0;
 	}
 
+	/* vertex u 간선 생성 */
 	GraphNode* Edge1 = (GraphNode*)malloc(sizeof(GraphNode));
+	Edge1->vertex = u;
+	Edge1->link = NULL;
+	/* vertex v 간선 생성*/
 	GraphNode* Edge2 = (GraphNode*)malloc(sizeof(GraphNode));
+	Edge2->vertex = v;
+	Edge2->link = NULL;
 
+	/* 헤드노드가 되는 정점에 연결 */
+	GraphNode* p = (h+u);
+	while(1){ // v간선 연결
+		/* 간선이 존재하는 경우 */
+		if(p->vertex == v){
+			printf("\n Edge is already exists!\n");
+			return 0;
+		}
+		/* 연결된 인접리스트가 없는경우 */
+		if(p->link == NULL){
+			p->link = Edge2;
+			break;
+		}
+		/* 연결된 인접리스트의 정점이 더 큰 경우 */
+		if(p->link->vertex > v){
+			Edge2->link = p->link;
+			p->link = Edge2;
+			break;
+		}
+		/* 더 큰 값을 만날때까지 이동 */
+		else p = p->link;
+	}
+	/* v 입장에서 연결 */
+	p = (h+v);
+	while(1){
+		/* 연결된 정점이 없는 경우 */
+		if(p->link == NULL){
+			p->link = Edge1;
+			break;
+		}
+		if(p->link->vertex > u){
+			Edge1->link = p->link;
+			p->link = Edge1;
+			break;
+		}
+		else p = p->link;
+	}
+	return 0;
 }
+/* recursive */
+void DFS(GraphNode* h,int v){
+	/* v 부터 시작하는 DFS */
+	if((h+v)->vertex != v){ /* 정점이 없는 경우 */ 
+		printf("\n Vertex is not exists!\n");
+		return;
+	}
+	
+	GraphNode* ptr = (h+v);
+	visited[v] = 1; //vertex v = TRUE 방문
+	printf(" [%d] ", v);
 
-void DFS(){
+	for(ptr; ptr; ptr=ptr->link){
+		if(!visited[ptr->vertex])
+			DFS(h, ptr->vertex);
+	}
+	return;
+} 
 
+void BFS(GraphNode* h, int v){
+	if((h+v)->vertex != v){ /* 정점이 없는 경우 */
+		printf("\n Vertex is not exists!\n");
+		return;
+	}
+	int visited[MAX_VERTEX];
+	rear = front = -1;
+
+	printf(" [%d] ", v);
+	visited[v] = 1;
+
+	GraphNode* p = (h+v);
+	enQueue(p);
+	while(1){
+		p = deQueue();
+		for(p; p; p = p->link){
+			v = p->vertex;
+			if(!visited[v]){
+				printf(" [%d] ", p->vertex);
+				enQueue(h+v);
+				visited[v] = 1;
+			}
+		}
+		if(rear == front) break;
+	}
+	return;
 }
+/* AdjList */
+void printGraph(GraphNode* h){
+	if(h == NULL){
+		printf("\nGraph is not exists!\n");
+		return;
+	}
 
-void BFS(){
-
-}
-
-void printGraph(){
-
+	GraphNode* p = h;
+	for(int i=0; i<MAX_VERTEX; i++){
+		p = h+i;
+		for(int j=0;j<MAX_VERTEX;j++){
+			if(p->vertex != -1){
+				printf(" [%d] ", p->vertex);
+			}
+			if(p->link != NULL) p = p->link;
+			else break;
+		}
+		printf("\n");
+	}
+	return;
 }
 
 
