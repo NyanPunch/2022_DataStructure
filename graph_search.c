@@ -150,7 +150,7 @@ int insertVertex(GraphNode* h, int v){
 /* 간선 생성 */
 int insertEdge(GraphNode* h, int u,int v){
 	/* 두 정점이 존재하지 않은경우 */
-	if((h+u)->vertex==-1||(h+v)->vertex==-1){	//??? vertex?? ???????? ??´?? ?????? ???
+	if((h+u)->vertex==-1||(h+v)->vertex==-1){
 		printf(" Vertex is not exists!\n");
 		return 0;
 	}
