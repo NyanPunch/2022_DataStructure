@@ -16,14 +16,11 @@ typedef struct node{
 #define MAX_VERTEX 10
 
 short int visited[MAX_VERTEX];
-
-/* for stack */
-#define MAX_STACK_SIZE 10	
-GraphNode* stack[MAX_STACK_SIZE];
-int top = -1;
-
-GraphNode* pop();
-void push(GraphNode* aNode);
+void clearvisit(){ /* 방문 초기화 */
+	for(int i=0;i<MAX_VERTEX;i++){
+		visited[i]=0;
+	}
+}
 
 /* for queue */
 #define MAX_QUEUE_SIZE 10 
@@ -95,6 +92,7 @@ int main()
 			printf("Your Key = ");
             scanf("%d", &u);
 			BFS(head, u);
+			clearvisit();
 			break;
         case 'p': case 'P':
 			printGraph(head);
@@ -176,7 +174,7 @@ int insertEdge(GraphNode* h, int u,int v){
 			return 0;
 		}
 		/* 연결된 인접리스트가 없는경우 */
-		if(p->link == NULL){
+		if(p->link==NULL){
 			p->link = Edge2;
 			break;
 		}
@@ -193,7 +191,7 @@ int insertEdge(GraphNode* h, int u,int v){
 	p = (h+v);
 	while(1){
 		/* 연결된 정점이 없는 경우 */
-		if(p->link == NULL){
+		if(p->link==NULL){
 			p->link = Edge1;
 			break;
 		}
@@ -222,6 +220,7 @@ void DFS(GraphNode* h,int v){
 		if(!visited[ptr->vertex])
 			DFS(h, ptr->vertex);
 	}
+
 	return;
 } 
 
@@ -230,13 +229,14 @@ void BFS(GraphNode* h, int v){
 		printf("\n Vertex is not exists!\n");
 		return;
 	}
-	int visited[MAX_VERTEX];
-	rear = front = -1;
+	/* 방문 배열 초기화 */
+	clearvisit();
+	rear=front=-1;
 
 	printf(" [%d] ", v);
 	visited[v] = 1;
 
-	GraphNode* p = (h+v);
+	GraphNode* p =(h+v);
 	enQueue(p);
 	while(1){
 		p = deQueue();
@@ -274,16 +274,6 @@ void printGraph(GraphNode* h){
 	return;
 }
 
-
-/* 스택의 탑 감소 */
-GraphNode* pop() {
-	if(top < 0) return NULL;
-	return stack[top--];
-}
-/* 스택의 탑을 증가시키고 삽입 */
-void push(GraphNode* aNode) {
-	stack[++top] = aNode; 
-}
 /* front를 증가시켜 삭제 */
 GraphNode* deQueue()
 {
