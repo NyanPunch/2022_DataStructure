@@ -115,7 +115,6 @@ int initializeGraph(GraphNode** h){
 		(*h+i)->link = NULL;		/* 초기화 */ 
 		(*h+i)->vertex = -1;		
 	}
-	top = -1;
 	front = rear = -1;
 	return 0;
 }
