@@ -1,12 +1,11 @@
 /* 11주차 과제
 *  2019038054 김경민
-*  2022 05 23 ~
+*  2022 05 23 ~ 2022 05 28
 *  Graph Search
 */
 
 #include <stdio.h>
 #include <stdlib.h>
-
 
 /* 그래프 노드 */
 typedef struct node{
@@ -84,6 +83,7 @@ int main()
 			insertEdge(head, u, v);
 			break;
         case 'd': case 'D':
+			clearvisit();	//방문 초기화
 			printf("Your Key = ");
             scanf("%d", &u);
 			DFS(head, u);
@@ -92,7 +92,6 @@ int main()
 			printf("Your Key = ");
             scanf("%d", &u);
 			BFS(head, u);
-			clearvisit();
 			break;
         case 'p': case 'P':
 			printGraph(head);
@@ -215,14 +214,14 @@ void DFS(GraphNode* h,int v){
 	visited[v] = 1; //vertex v = TRUE 방문
 	printf(" [%d] ", v);
 
-	for(ptr; ptr; ptr=ptr->link){
+	for(ptr; ptr; ptr = ptr->link){
 		if(!visited[ptr->vertex])
 			DFS(h, ptr->vertex);
 	}
-
+	/* 방문노드를 초기화해야 2회이상 탐색가능 */
 	return;
 } 
-
+/* Queue 이용 */
 void BFS(GraphNode* h, int v){
 	if((h+v)->vertex != v){ /* 정점이 없는 경우 */
 		printf("\n Vertex is not exists!\n");
@@ -260,11 +259,13 @@ void printGraph(GraphNode* h){
 
 	GraphNode* p = h;
 	for(int i=0; i<MAX_VERTEX; i++){
-		p = h+i;
+		p =(h+i);
 		for(int j=0;j<MAX_VERTEX;j++){
+			/* 정점이 할당된 경우 */
 			if(p->vertex != -1){
-				printf(" [%d] ", p->vertex);
+				printf(" [%d] ->", p->vertex);
 			}
+			/* 인접리스트가 있는 경우 */
 			if(p->link != NULL) p = p->link;
 			else break;
 		}
