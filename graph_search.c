@@ -10,25 +10,27 @@
 /* 그래프 노드 */
 typedef struct node{
 	int vertex;			//정점을 나타냄
-	struct node* link; 	//다음 인접 정점과 연결
+	struct node* link; 	//다음 노드와 연결
 }GraphNode;
 #define MAX_VERTEX 10
 
+/* 방문확인용 배열 */
 short int visited[MAX_VERTEX];
-void clearvisit(){ /* 방문 초기화 */
+/* 방문 초기화함수 */
+void clearvisit(){
 	for(int i=0;i<MAX_VERTEX;i++){
 		visited[i]=0;
 	}
 }
 
 /* for queue */
-#define MAX_QUEUE_SIZE 10 
+#define MAX_QUEUE_SIZE 10
 GraphNode* queue[MAX_QUEUE_SIZE];
 int front = -1;
 int rear = -1;
 
-GraphNode* deQueue();
-void enQueue(GraphNode* aNode);
+GraphNode* deQueue();	//큐 삭제
+void enQueue(GraphNode* aNode); //큐 삽입
 
 /* 함수 선언 */
 int initializeGraph(GraphNode** h); /* 그래프 생성 */
@@ -43,8 +45,8 @@ int freeVertex(GraphNode* ptr);	/* 정점할당해제 */
 int main()
 {
 	char command;
-	GraphNode* head = NULL;
-	int u, v;
+	GraphNode* head = NULL;	//헤드노드 생성
+	int u, v; //정점을 입력받을 변수 생성
 
 	do{
 		printf("\n\n");
@@ -182,7 +184,7 @@ int insertEdge(GraphNode* h, int u,int v){
 			p->link = Edge2;
 			break;
 		}
-		/* 다음 노드가 있을 시 이동 */
+		/* 정점이 더 작은 경우 이동 */
 		else p = p->link;
 	}
 	/* v 입장에서 연결 */
@@ -198,7 +200,7 @@ int insertEdge(GraphNode* h, int u,int v){
 			p->link = Edge1;
 			break;
 		}
-		else p = p->link;
+		else p = p->link; //연결된 정점이 작은 경우 이동
 	}
 	return 0;
 }
@@ -209,12 +211,11 @@ void DFS(GraphNode* h,int v){
 		printf("\n Vertex is not exists!\n");
 		return;
 	}
-	
-	GraphNode* ptr = (h+v);
+	GraphNode* ptr = (h+v); //포인터변수 생성
 	visited[v] = 1; //vertex v = TRUE 방문
 	printf(" [%d] ", v);
 	//다음 링크가 있을 경우
-	for(ptr; ptr; ptr = ptr->link){
+	for(;ptr;ptr = ptr->link){ //방문 1이면 다음 정점으로 이동
 		/* visited[0] 일 경우 DFS실행 */
 		if(!visited[ptr->vertex])
 			DFS(h, ptr->vertex);
@@ -238,7 +239,7 @@ void BFS(GraphNode* h, int v){
 	enQueue(p); //큐 삽입
 	while(1){
 		p = deQueue(); 
-		for(p; p; p = p->link){ 
+		for(;p;p = p->link){ 
 			v = p->vertex;
 			if(!visited[v]){ //방문하지않은경우 출력후큐삽입
 				printf(" [%d] ", p->vertex);
