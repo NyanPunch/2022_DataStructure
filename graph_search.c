@@ -182,7 +182,7 @@ int insertEdge(GraphNode* h, int u,int v){
 			p->link = Edge2;
 			break;
 		}
-		/* 더 큰 값을 만날때까지 이동 */
+		/* 다음 노드가 있을 시 이동 */
 		else p = p->link;
 	}
 	/* v 입장에서 연결 */
@@ -213,12 +213,12 @@ void DFS(GraphNode* h,int v){
 	GraphNode* ptr = (h+v);
 	visited[v] = 1; //vertex v = TRUE 방문
 	printf(" [%d] ", v);
-
+	//다음 링크가 있을 경우
 	for(ptr; ptr; ptr = ptr->link){
+		/* visited[0] 일 경우 DFS실행 */
 		if(!visited[ptr->vertex])
 			DFS(h, ptr->vertex);
 	}
-	/* 방문노드를 초기화해야 2회이상 탐색가능 */
 	return;
 } 
 /* Queue 이용 */
@@ -235,17 +235,18 @@ void BFS(GraphNode* h, int v){
 	visited[v] = 1;
 
 	GraphNode* p =(h+v);
-	enQueue(p);
+	enQueue(p); //큐 삽입
 	while(1){
-		p = deQueue();
-		for(p; p; p = p->link){
+		p = deQueue(); 
+		for(p; p; p = p->link){ 
 			v = p->vertex;
-			if(!visited[v]){
+			if(!visited[v]){ //방문하지않은경우 출력후큐삽입
 				printf(" [%d] ", p->vertex);
 				enQueue(h+v);
 				visited[v] = 1;
 			}
 		}
+		/* isEmpty */
 		if(rear == front) break;
 	}
 	return;
