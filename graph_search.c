@@ -192,7 +192,7 @@ int insertEdge(GraphNode* h, int u,int v){
 		if(p->link==NULL){
 			p->link = Edge1;
 			break;
-		}
+		} /* 연결된 정점이 더 큰 경우 */
 		if(p->link->vertex > u){
 			Edge1->link = p->link;
 			p->link = Edge1;
