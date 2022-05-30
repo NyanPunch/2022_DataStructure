@@ -73,7 +73,7 @@ int main()
 			printf("----------------------------------------------------------------\n");
 			break;
         case 'v': case 'V':
-            printf("Your Key = ");
+            printf("Your Key(0~9) = ");
             scanf("%d", &u);
 			insertVertex(head, u);
 			break;
@@ -131,6 +131,7 @@ int freeGraph(GraphNode* h){
 }
 /* recursive */
 int freeVertex(GraphNode* ptr){
+	/* 연결된 인접리스트가 있으면 이동 */
 	if(ptr){
 		freeVertex(ptr->link);
 		free(ptr);
@@ -139,6 +140,11 @@ int freeVertex(GraphNode* ptr){
 }
 /* 정점 생성 */
 int insertVertex(GraphNode* h, int v){
+	/* 0~9 범위 밖에서 입력 시 */
+	if(0 > v || v > 9){
+		printf(" Vertex number is get out range!\n");
+		return 0;
+	}
 	/* 정점이 존재하는 경우 */
 	if((h+v)->vertex == v){
 		printf(" Vertex is already exists!\n");
