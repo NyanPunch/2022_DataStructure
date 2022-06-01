@@ -66,6 +66,9 @@ int main()
 			break;
 		case 'q': case 'Q':
 			freeArray(array);
+			printf("----------------------------------------------------------------\n");
+			printf("                    2019038054       김경민                     \n");
+			printf("----------------------------------------------------------------\n");
 			break;
 		case 's': case 'S':
 			selectionSort(array);
@@ -157,7 +160,7 @@ void printArray(int *a)
 	printf("\n");
 }
 
-
+/* 선택 정렬 */
 int selectionSort(int *a)
 {
 	int min;
@@ -189,7 +192,7 @@ int selectionSort(int *a)
 	printArray(a);
 	return 0;
 }
-
+/* 삽입 정렬 */
 int insertionSort(int *a)
 {
 	int i, j, t;
@@ -216,7 +219,7 @@ int insertionSort(int *a)
 
 	return 0;
 }
-
+/* 버블정렬 */
 int bubbleSort(int *a)
 {
 	int i, j, t;
@@ -244,7 +247,7 @@ int bubbleSort(int *a)
 
 	return 0;
 }
-
+/* 쉘정렬 */
 int shellSort(int *a)
 {
 	int i, j, k, h, v;
@@ -276,7 +279,7 @@ int shellSort(int *a)
 
 	return 0;
 }
-
+/* 퀵 정렬 */
 int quickSort(int *a, int n)
 {
 	int v, t;
@@ -378,6 +381,3 @@ int search(int *ht, int key)
 	}
 	return index;
 }
-
-
-
