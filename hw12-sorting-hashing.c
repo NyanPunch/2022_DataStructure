@@ -163,31 +163,24 @@ void printArray(int *a)
 /* 선택 정렬 */
 int selectionSort(int *a)
 {
-	int min;
-	int minindex;
+	int min; //최소값
+	int minindex; //기준위치(최소배열)
 	int i, j;
-
 	printf("Selection Sort: \n");
 	printf("----------------------------------------------------------------\n");
-
 	printArray(a);
-
-	for (i = 0; i < MAX_ARRAY_SIZE; i++)
-	{
+	for (i = 0; i < MAX_ARRAY_SIZE; i++) {
 		minindex = i;
-		min = a[i];
-		for(j = i+1; j < MAX_ARRAY_SIZE; j++)
-		{
-			if (min > a[j])
-			{
+		min = a[i]; //최소값을 검색할 배열로 설정
+		for(j = i+1; j < MAX_ARRAY_SIZE; j++) {
+			if (min > a[j])	{ //a[j]가 더 작을경우 교체
 				min = a[j];
 				minindex = j;
 			}
 		}
-		a[minindex] = a[i];
-		a[i] = min;
+		a[minindex] = a[i]; //값을 서로 교환
+		a[i] = min; //min == a[j]
 	}
-
 	printf("----------------------------------------------------------------\n");
 	printArray(a);
 	return 0;
@@ -196,27 +189,21 @@ int selectionSort(int *a)
 int insertionSort(int *a)
 {
 	int i, j, t;
-
 	printf("Insertion Sort: \n");
 	printf("----------------------------------------------------------------\n");
-
 	printArray(a);
-
-	for(i = 1; i < MAX_ARRAY_SIZE; i++)
-	{
-		t = a[i];
-		j = i;
-		while (a[j-1] > t && j > 0)
-		{
-			a[j] = a[j-1];
+	for(i = 1; i < MAX_ARRAY_SIZE; i++)	{ //i = 1로 시작 a[0] = 정렬 집합
+		t = a[i]; //정렬하지않은 첫 원소를 삽입
+		j = i; //정렬할 인덱스 i 저장
+		/* 정렬집합에서 반복 */
+		while (a[j-1] > t && j > 0)	{ // 0 < j < a[j-1]
+			a[j] = a[j-1]; 
 			j--;
 		}
-		a[j] = t;
+		a[j] = t; //정렬할 원소 삽입 t == a[i]
 	}
-
 	printf("----------------------------------------------------------------\n");
 	printArray(a);
-
 	return 0;
 }
 /* 버블정렬 */
