@@ -89,9 +89,7 @@ int main()
 			quickSort(array, MAX_ARRAY_SIZE);
 			printf("----------------------------------------------------------------\n");
 			printArray(array);
-
 			break;
-
 		case 'h': case 'H':
 			printf("Hashing: \n");
 			printf("----------------------------------------------------------------\n");
@@ -99,7 +97,6 @@ int main()
 			hashing(array, &hashtable);
 			printArray(hashtable);
 			break;
-
 		case 'e': case 'E':
 			printf("Your Key = ");
 			scanf("%d", &key);
@@ -107,7 +104,6 @@ int main()
 			index = search(hashtable, key);
 			printf("key = %d, index = %d,  hashtable[%d] = %d\n", key, index, index, hashtable[index]);
 			break;
-
 		case 'p': case 'P':
 			printArray(array);
 			break;
@@ -115,9 +111,7 @@ int main()
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
 			break;
 		}
-
 	}while(command != 'q' && command != 'Q');
-
 	return 1;
 }
 
@@ -296,23 +290,23 @@ int hashing(int *a, int **ht)
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
 		hashtable[i] = -1; //해시테이블 초기화
 	/*
-	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
+	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++) // Check hashtable
 		printf("hashtable[%d] = %d\n", i, hashtable[i]);
 	*/
 	int key = -1; 
 	int hashcode = -1; 
 	int index = -1;
 	for (int i = 0; i < MAX_ARRAY_SIZE; i++) {
-		key = a[i];
-		hashcode = hashCode(key);
-		//printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
+		key = a[i]; //array에 각 값들을 해시코드의 키로 변환
+		hashcode = hashCode(key); //해시코드 삽입 
+		//printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]); //Check hashcode
 		if (hashtable[hashcode] == -1) { //해시테이블이 비어있으면 값 저장
-			hashtable[hashcode] = key;
+			hashtable[hashcode] = key; 
 		} else {
 			index = hashcode;
 			while(hashtable[index] != -1) { //해시테이블이 빈 곳
 				index = (++index) % MAX_HASH_TABLE_SIZE; //한 칸씩 증가
-				//printf("index = %d\n", index);
+				//printf("index = %d\n", index); //Check index
 			}
 			hashtable[index] = key; //빈 자리에 key 저장
 		}
@@ -322,13 +316,12 @@ int hashing(int *a, int **ht)
 /* 해시테이블에 있는 값의 주소를 반환 */
 int search(int *ht, int key)
 {
-	int index = hashCode(key);
-	if(ht[index] == key)
+	int index = hashCode(key); //반환된 해시코드를 받음
+	if(ht[index] == key) //해시테이블의 해시코드와 키가 동일하면 hashcode return
 		return index;
-
-	while(ht[++index] != key)
+	while(ht[++index] != key) //같을때까지 반복
 	{
 		index = index % MAX_HASH_TABLE_SIZE;
 	}
-	return index;
+	return index; //ht[index] == key
 }
