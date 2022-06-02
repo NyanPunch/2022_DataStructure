@@ -278,11 +278,11 @@ int quickSort(int *a, int n) //n = MAX_ARRAY_SIZE
 	}
 	return 0;
 }
-
+/* 해시코드를 반환 */
 int hashCode(int key) {
    return key % MAX_HASH_TABLE_SIZE;
 }
-
+/* 해시 함수 */
 int hashing(int *a, int **ht)
 {
 	int *hashtable = NULL;
@@ -291,45 +291,35 @@ int hashing(int *a, int **ht)
 		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);
 		*ht = hashtable;  /* 할당된 메모리의 주소를 복사 --> main에서 배열을 control 할수 있도록 함*/
 	} else {
-		hashtable = *ht;	/* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
+		hashtable = *ht; /* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
 	}
-
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
-		hashtable[i] = -1;
-
+		hashtable[i] = -1; //해시테이블 초기화
 	/*
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
 		printf("hashtable[%d] = %d\n", i, hashtable[i]);
 	*/
-
-	int key = -1;
-	int hashcode = -1;
+	int key = -1; 
+	int hashcode = -1; 
 	int index = -1;
 	for (int i = 0; i < MAX_ARRAY_SIZE; i++) {
 		key = a[i];
 		hashcode = hashCode(key);
-		/*
-		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
-		*/
-		if (hashtable[hashcode] == -1) {
+		//printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
+		if (hashtable[hashcode] == -1) { //해시테이블이 비어있으면 값 저장
 			hashtable[hashcode] = key;
 		} else {
-
 			index = hashcode;
-
-			while(hashtable[index] != -1) {
-				index = (++index) % MAX_HASH_TABLE_SIZE;
-				/*
-				printf("index = %d\n", index);
-				*/
+			while(hashtable[index] != -1) { //해시테이블이 빈 곳
+				index = (++index) % MAX_HASH_TABLE_SIZE; //한 칸씩 증가
+				//printf("index = %d\n", index);
 			}
-			hashtable[index] = key;
+			hashtable[index] = key; //빈 자리에 key 저장
 		}
 	}
-
 	return 0;
 }
-
+/* 해시테이블에 있는 값의 주소를 반환 */
 int search(int *ht, int key)
 {
 	int index = hashCode(key);
