@@ -276,7 +276,7 @@ int quickSort(int *a, int n) //n = MAX_ARRAY_SIZE
 int hashCode(int key) {
    return key % MAX_HASH_TABLE_SIZE;
 }
-/* 해시 함수 */
+/* 해시 함수 linear probing 방식으로 overflow 처리 */
 int hashing(int *a, int **ht)
 {
 	int *hashtable = NULL;
