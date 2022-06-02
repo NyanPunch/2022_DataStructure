@@ -206,97 +206,76 @@ int insertionSort(int *a)
 	printArray(a);
 	return 0;
 }
-/* 버블정렬 */
+/* 버블정렬 뒤에 있는 배열과 비교하여 스왑 */
 int bubbleSort(int *a)
 {
-	int i, j, t;
-
+	int i, j, t; //t = temp
 	printf("Bubble Sort: \n");
 	printf("----------------------------------------------------------------\n");
-
 	printArray(a);
-
-	for(i = 0; i < MAX_ARRAY_SIZE; i++)
-	{
-		for (j = 0; j < MAX_ARRAY_SIZE; j++)
-		{
-			if (a[j-1] > a[j])
-			{
-				t = a[j-1];
+	for(i = 0; i < MAX_ARRAY_SIZE; i++)	{
+		for (j = 0; j < MAX_ARRAY_SIZE; j++) {
+			if (a[j-1] > a[j]) { // j-1 보다 j가 더 큰 경우 Swap
+				t = a[j-1];	
 				a[j-1] = a[j];
 				a[j] = t;
 			}
 		}
 	}
-
 	printf("----------------------------------------------------------------\n");
 	printArray(a);
-
 	return 0;
 }
-/* 쉘정렬 */
+/* 셸 정렬 */
 int shellSort(int *a)
 {
-	int i, j, k, h, v;
-
+	int i, j, k, h, v; //h = 간격
 	printf("Shell Sort: \n");
 	printf("----------------------------------------------------------------\n");
-
 	printArray(a);
-
-	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2)
-	{
-		for (i = 0; i < h; i++)
-		{
-			for(j = i + h; j < MAX_ARRAY_SIZE; j += h)
-			{
-				v = a[j];
+	for (h = MAX_ARRAY_SIZE/2; h > 0; h /= 2) { //간격설정 절반씩 감소
+		for (i = 0; i < h; i++) {
+			for(j = i + h; j < MAX_ARRAY_SIZE; j += h) { //h만큼 간격생성
+				v = a[j]; //삽입될 값
 				k = j;
-				while (k > h-1 && a[k-h] > v)
-				{
-					a[k] = a[k-h];
+				while (k > h-1 && a[k-h] > v) { //정렬이 필요할 시
+					a[k] = a[k-h]; //h 간격으로 이동
 					k -= h;
 				}
-				a[k] = v;
+				a[k] = v; //삽입
 			}
 		}
 	}
 	printf("----------------------------------------------------------------\n");
 	printArray(a);
-
 	return 0;
 }
 /* 퀵 정렬 */
-int quickSort(int *a, int n)
+int quickSort(int *a, int n) //n = MAX_ARRAY_SIZE
 {
-	int v, t;
-	int i, j;
-
-	if (n > 1)
-	{
+	int v, t; //v = pivot t = temp
+	int i, j; //i = left, j = right
+	if (n > 1) {
 		v = a[n-1];
 		i = -1;
 		j = n - 1;
-
-		while(1)
-		{
-			while(a[++i] < v);
-			while(a[--j] > v);
-
+		while(1) {
+			while(a[++i] < v); //i번째가 v보다 작으면 stop
+			while(a[--j] > v); //j번째가 v보다 크면 stop
+			/* 왼쪽이 오른쪽보다 크거나 같은 경우 break */
 			if (i >= j) break;
+			/* swap */
 			t = a[i];
 			a[i] = a[j];
 			a[j] = t;
 		}
+		/* swap */
 		t = a[i];
 		a[i] = a[n-1];
 		a[n-1] = t;
-
-		quickSort(a, i);
-		quickSort(a+i+1, n-i-1);
+		quickSort(a, i); //왼쪽 부분집합 quicksort
+		quickSort(a+i+1, n-i-1); //오른쪽 부분집합 quicksort
 	}
-
-
 	return 0;
 }
 
@@ -307,7 +286,6 @@ int hashCode(int key) {
 int hashing(int *a, int **ht)
 {
 	int *hashtable = NULL;
-
 	/* hash table이 NULL인 경우 메모리 할당 */
 	if(*ht == NULL) {
 		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);
@@ -327,22 +305,19 @@ int hashing(int *a, int **ht)
 	int key = -1;
 	int hashcode = -1;
 	int index = -1;
-	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
-	{
+	for (int i = 0; i < MAX_ARRAY_SIZE; i++) {
 		key = a[i];
 		hashcode = hashCode(key);
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
-		{
+		if (hashtable[hashcode] == -1) {
 			hashtable[hashcode] = key;
-		} else 	{
+		} else {
 
 			index = hashcode;
 
-			while(hashtable[index] != -1)
-			{
+			while(hashtable[index] != -1) {
 				index = (++index) % MAX_HASH_TABLE_SIZE;
 				/*
 				printf("index = %d\n", index);
@@ -358,7 +333,6 @@ int hashing(int *a, int **ht)
 int search(int *ht, int key)
 {
 	int index = hashCode(key);
-
 	if(ht[index] == key)
 		return index;
 
