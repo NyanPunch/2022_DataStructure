@@ -284,8 +284,8 @@ int hashing(int *a, int **ht)
 	if(*ht == NULL) {
 		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);
 		*ht = hashtable;  /* 할당된 메모리의 주소를 복사 --> main에서 배열을 control 할수 있도록 함*/
-	} else {
-		hashtable = *ht; /* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
+	} else { /* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
+		hashtable = *ht; 
 	}
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
 		hashtable[i] = -1; //해시테이블 초기화
@@ -302,7 +302,7 @@ int hashing(int *a, int **ht)
 		//printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]); //Check hashcode
 		if (hashtable[hashcode] == -1) { //해시테이블이 비어있으면 값 저장
 			hashtable[hashcode] = key; 
-		} else {
+		} else { /* linear probing */
 			index = hashcode;
 			while(hashtable[index] != -1) { //해시테이블이 빈 곳
 				index = (++index) % MAX_HASH_TABLE_SIZE; //한 칸씩 증가
